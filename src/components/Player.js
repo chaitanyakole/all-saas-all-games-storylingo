@@ -12,11 +12,14 @@ import jwt from "jwt-decode";
 import { usePlayers } from "../utility/helperHook";
 
 function Player() {
-  const { Player1, Player2 } = usePlayers(); 
+  const { Player1, Player2 } = usePlayers();
   const [current, setCurrent] = useState("");
-  const [currentUserLogin,setIsCurrentUserLogin] = useState(!!localStorage.getItem('token'))
-  const [isBuddyLogin,setIsBuddyLogin] = useState(!!localStorage.getItem('buddyToken'))
-  
+  const [currentUserLogin, setIsCurrentUserLogin] = useState(
+    !!localStorage.getItem("token")
+  );
+  const [isBuddyLogin, setIsBuddyLogin] = useState(
+    !!localStorage.getItem("buddyToken")
+  );
   function setPlayers(item) {
     setCurrent(item);
     localStorage.setItem("players", item);
@@ -27,11 +30,7 @@ function Player() {
   return (
     <div className="main-container">
       <div className="top-header">
-        <img
-          src={logo}
-          className="storyling-logo"
-          alt="logo"
-        />
+        <img src={logo} className="storyling-logo" alt="logo" />
         <Link to="/">
           <img
             src={homeicon}
@@ -53,53 +52,58 @@ function Player() {
           }
         />
       </div>
-      {
-        currentUserLogin?  <div className="player-container">
-        <>
-          <p
-            onClick={() => {
-              interactCall("setPlayer_p1", "player", "DT", "");
-              setPlayers("p1s");
-            }}
-            className={
-              current === "p1s" ? "no_Of_Player_Selected" : "no_Of_Player"
-            }
-          >
-            {Player1 === "" ? "1 Player" : Player1.student_name}
-          </p>
-        </>
-        { isBuddyLogin ? (
+      {currentUserLogin ? (
+        <div className="player-container">
           <>
             <p
               onClick={() => {
-                interactCall("BuddyPlayer_p2", "player", "DT", "");
-                setPlayers("p2s");
+                interactCall("setPlayer_p1", "player", "DT", "");
+                setPlayers("p1s");
               }}
               className={
-                current === "p2s" ? "no_Of_Player_Selected" : "no_Of_Player"
+                current === "p1s" ? "no_Of_Player_Selected" : "no_Of_Player"
               }
             >
-              {Player2 === "" ? "2 Player" : Player2.student_name}
+              {Player1 === ""
+                ? "1 Player"
+                : Player1.student_name.toUpperCase() ||
+                  Player1.name.toUpperCase()}
             </p>
           </>
-        ) : (
-          ""
-        )}
-      </div> :  <div className="player-container">
-        <>
-          <p
-            onClick={() => {
-              interactCall("BuddyPlayer_p1", "player", "DT", "");
-              setPlayers("p1s");
-            }}
-            className={
-              current === "p1s" ? "no_Of_Player_Selected" : "no_Of_Player"
-            }
-          >
-            {Player1 === "" ? "1 Player" : Player1.student_name}
-          </p>
-        </>
-      
+          {isBuddyLogin ? (
+            <>
+              <p
+                onClick={() => {
+                  interactCall("BuddyPlayer_p2", "player", "DT", "");
+                  setPlayers("p2s");
+                }}
+                className={
+                  current === "p2s" ? "no_Of_Player_Selected" : "no_Of_Player"
+                }
+              >
+                {Player2 === "" ? "2 Player" : Player2.student_name}
+              </p>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        <div className="player-container">
+          <>
+            <p
+              onClick={() => {
+                interactCall("BuddyPlayer_p1", "player", "DT", "");
+                setPlayers("p1s");
+              }}
+              className={
+                current === "p1s" ? "no_Of_Player_Selected" : "no_Of_Player"
+              }
+            >
+              {Player1 === "" ? "1 Player" : Player1.student_name}
+            </p>
+          </>
+
           <>
             <p
               onClick={() => {
@@ -113,8 +117,8 @@ function Player() {
               {Player2 === "" ? "2 Player" : Player2.student_name}
             </p>
           </>
-      </div>
-      }
+        </div>
+      )}
       <div className="footerNext">
         <Link to="/avatar">
           <img
