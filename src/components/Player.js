@@ -66,8 +66,9 @@ function Player() {
             >
               {Player1 === ""
                 ? "1 Player"
-                : Player1.student_name.toUpperCase() ||
-                  Player1.name.toUpperCase()}
+                : Player1?.student_name?.toUpperCase() ||
+                  Player1?.name?.toUpperCase() ||
+                  "Player 1"}
             </p>
           </>
           {isBuddyLogin ? (
