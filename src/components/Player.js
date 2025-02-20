@@ -54,23 +54,22 @@ function Player() {
       </div>
       {currentUserLogin ? (
         <div className="player-container">
-          <>
-            <p
-              onClick={() => {
-                interactCall("setPlayer_p1", "player", "DT", "");
-                setPlayers("p1s");
-              }}
-              className={
-                current === "p1s" ? "no_Of_Player_Selected" : "no_Of_Player"
-              }
-            >
-              {Player1 === ""
-                ? "1 Player"
-                : Player1?.student_name?.toUpperCase() ||
-                  Player1?.name?.toUpperCase() ||
-                  "Player 1"}
-            </p>
-          </>
+          <p
+            onClick={() => {
+              interactCall("setPlayer_p1", "player", "DT", "");
+              setPlayers("p1s");
+            }}
+            className={
+              current === "p1s" ? "no_Of_Player_Selected" : "no_Of_Player"
+            }
+          >
+            {Player1 === ""
+              ? "1 Player"
+              : Player1?.student_name?.toUpperCase() ||
+                Player1?.name?.toUpperCase() ||
+                "Player 1"}
+          </p>
+
           {isBuddyLogin ? (
             <>
               <p
