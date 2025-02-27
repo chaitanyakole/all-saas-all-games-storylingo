@@ -41,7 +41,7 @@ function App() {
             pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
           },
           timeDiff: 0, // Defines the time difference// Defines the object roll up data
-          host: process.env.REACT_APP_host, // Defines the from which domain content should be load
+          host: process.env.REACT_APP_HOST, // Defines the from which domain content should be load
           endpoint: process.env.REACT_APP_endpoint,
           apislug: process.env.REACT_APP_apislug,
         },
@@ -73,11 +73,11 @@ function App() {
       window.removeEventListener("beforeunload", cleanup);
     };
   }, []);
-  const Home = React.lazy(()=> import('./components/Home'))
-  const Player = React.lazy(()=> import('./components/Player'))
-  const Avatar = React.lazy(()=> import('./components/Avatar'))
-  const Game = React.lazy(()=> import('./components/Game'))
-  const Result = React.lazy(()=> import('./components/Result'))
+  const Home = React.lazy(() => import("./components/Home"));
+  const Player = React.lazy(() => import("./components/Player"));
+  const Avatar = React.lazy(() => import("./components/Avatar"));
+  const Game = React.lazy(() => import("./components/Game"));
+  const Result = React.lazy(() => import("./components/Result"));
 
   function getParameter(key, location) {
     if (key) {
@@ -109,20 +109,18 @@ function App() {
     }
   }, []);
 
-
-
   return (
     <div className="App">
       <HashRouter>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="player" element={<Player />} />
-          <Route path="avatar" element={<Avatar />} />
-          <Route path="play" element={<Game />} />
-          <Route path="result" element={<Result />} />
-        </Routes>
-      </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="player" element={<Player />} />
+            <Route path="avatar" element={<Avatar />} />
+            <Route path="play" element={<Game />} />
+            <Route path="result" element={<Result />} />
+          </Routes>
+        </Suspense>
       </HashRouter>
     </div>
   );
