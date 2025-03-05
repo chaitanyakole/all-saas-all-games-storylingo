@@ -57,7 +57,7 @@ jobs:
           REACT_APP_AWS_S3_BUCKET_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_URL }}
           REACT_APP_AWS_S3_BUCKET_NAME: ${{ vars.REACT_APP_AWS_S3_BUCKET_NAME }}
           REACT_APP_AUTHTOKEN: ${{ vars.REACT_APP_AUTHTOKEN }}
-          REACT_APP_ASR_API_KEY: ${{ vars.REACT_APP_ASR_API_KEY }}
+          REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
           REACT_APP_APISLUG: ${{ vars.REACT_APP_APISLUG }}
           PUBLIC_URL: ${{ vars.PUBLIC_URL }}
           NODE_ENV: ${{ vars.NODE_ENV }}
