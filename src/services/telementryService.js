@@ -4,10 +4,19 @@ import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
 import jwt from "jwt-decode";
 
 var contentSessionId;
+var tenantId;
+var cohortId;
 let playSessionId;
 let config;
 let isBuddyLogin = checkTokenInLocalStorage();
 
+if (localStorage.getItem("tenantId")) {
+  tenantId = localStorage.getItem("tenantId");
+}
+
+if (localStorage.getItem("cohortId")) {
+  cohortId = localStorage.getItem("cohortId");
+}
 if (localStorage.getItem("token") !== null) {
   let jwtToken = localStorage.getItem("token");
   var userDetails = jwt(jwtToken);
@@ -23,7 +32,7 @@ if (localStorage.getItem("contentSessionId") !== null) {
   contentSessionId = localStorage.getItem("contentSessionId");
 } else {
   contentSessionId = uniqueId();
-  localStorage.setItem('StorylingoContentSessionId', contentSessionId);
+  localStorage.setItem("StorylingoContentSessionId", contentSessionId);
 }
 
 export const initialize = ({ context, config, metadata }) => {
@@ -50,6 +59,8 @@ export const initialize = ({ context, config, metadata }) => {
         cdata: [
           { id: contentSessionId, type: "ContentSession" },
           { id: playSessionId, type: "PlaySession" },
+          { id: tenantId, type: "TenantId" },
+          { id: cohortId, type: "CohortId" },
         ],
       },
       userOrgDetails: {},
@@ -173,7 +184,9 @@ export const getEventOptions = () => {
   var emis_username = "anonymous";
   var buddyUserId = "";
 
-  if (localStorage.getItem("token") !== null) {
+  if (localStorage.getItem("userId")) {
+    emis_username = localStorage.getItem("userId");
+  } else if (localStorage.getItem("token") !== null) {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwt(jwtToken);
     emis_username = userDetails.emis_username;
@@ -190,42 +203,48 @@ export const getEventOptions = () => {
     ? emis_username + "/" + buddyUserId
     : emis_username || "anonymous";
 
-    let myCurrectLanguage = localStorage.getItem('apphomelang')
+  let myCurrectLanguage = localStorage.getItem("apphomelang");
 
-    return {
-      object: {},
-      context: {
-        pdata: {
-          // optional
-          id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-          ver: process.env.REACT_APP_ver, // Version of the App
-          pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
-        },
-        env: process.env.REACT_APP_env,
-        uid: `${
-          isBuddyLogin
-            ? emis_username + '/' + buddyUserId
-            : emis_username || 'anonymous'
-        }`,
-        cdata:  userId == 'anonymous'
-        ? [
-          { id: contentSessionId, type: 'ContentSession' },
-          { id: playSessionId, type: 'PlaySession' },
-          { id: userId, type: userType },
-          { id: myCurrectLanguage, type: 'language' },
-        ]:[
-          { id: contentSessionId, type: 'ContentSession' },
-          { id: playSessionId, type: 'PlaySession' },
-          { id: userId, type: userType },
-          { id: myCurrectLanguage, type: 'language' },
-          { id: userDetails?.school_name, type: 'school_name' },
-          {
-            id: userDetails?.class_studying_id,
-            type: 'class_studying_id',
-          },
-          { id: userDetails?.udise_code, type: 'udise_code' },
-        ],
-        rollup: {},
+  return {
+    object: {},
+    context: {
+      pdata: {
+        // optional
+        id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+        ver: process.env.REACT_APP_ver, // Version of the App
+        pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
       },
-    };
+      env: process.env.REACT_APP_env,
+      uid: `${
+        isBuddyLogin
+          ? emis_username + "/" + buddyUserId
+          : emis_username || "anonymous"
+      }`,
+      cdata:
+        userId == "anonymous"
+          ? [
+              { id: contentSessionId, type: "ContentSession" },
+              { id: playSessionId, type: "PlaySession" },
+              { id: userId, type: userType },
+              { id: myCurrectLanguage, type: "language" },
+              { id: tenantId, type: "TenantId" },
+              { id: cohortId, type: "CohortId" },
+            ]
+          : [
+              { id: contentSessionId, type: "ContentSession" },
+              { id: playSessionId, type: "PlaySession" },
+              { id: userId, type: userType },
+              { id: myCurrectLanguage, type: "language" },
+              { id: userDetails?.school_name, type: "school_name" },
+              { id: tenantId, type: "TenantId" },
+              { id: cohortId, type: "CohortId" },
+              {
+                id: userDetails?.class_studying_id,
+                type: "class_studying_id",
+              },
+              { id: userDetails?.udise_code, type: "udise_code" },
+            ],
+      rollup: {},
+    },
+  };
 };
